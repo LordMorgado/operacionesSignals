@@ -197,6 +197,115 @@ public class Con {
         generateInitialGraph(DF2,"Funcion 2"," H ( N )",1);
         return new discreteFunction(res,DF1.getZeroPosition()+DF2.getZeroPosition());
     }
+    public discreteFunction suma(){
+       discreteFunction DF1 = getFunction("Ingrese la primer funcion discreta");
+        double [] f1=DF1.getValues();
+        discreteFunction DF2 = getFunction("Ingrese la seguda funcion discreta");
+        double f2[] = DF2.getValues();
+        int tam=0;
+        if(f1.length>=f2.length){//caso2
+            tam=f1.length+DF2.getZeroPosition();
+        }else{
+          //--caso1:f2.length > f1.length y DF1.getZeroPosition()>DF2.getZeroPosition()---------------------
+         tam=f2.length+DF1.getZeroPosition(); 
+        }
+            double f2_fix[]=new double[tam];
+            double f1_fix[]=new double[tam];
+            double resultado[]=new double[tam];
+        if(DF1.getZeroPosition()>=DF2.getZeroPosition()&&f2.length>f1.length){//caso 1
+            for (int i = 0; i < f2_fix.length; i++) {
+                f2_fix[i]=0;
+            }
+            for (int i = DF1.getZeroPosition(); i < f2_fix.length; i++) {
+                f2_fix[i]=f2[i-DF1.getZeroPosition()]; 
+            }
+            for (int i = 0; i < f1_fix.length; i++) {
+                f1_fix[i]=0;
+            }
+            for (int i = 0; i < f1.length; i++) {
+                f1_fix[i]=f1[i];
+            }
+            for (int i = 0; i < tam; i++) {
+                resultado[i]=f1_fix[i]+f2_fix[i];
+            }
+            
+        }else{//caso2
+            for (int i = 0; i < f1_fix.length; i++) {
+                f1_fix[i]=0;
+            }
+            for (int i = DF2.getZeroPosition(); i < f1_fix.length; i++) {
+                f1_fix[i]=f1[i-DF2.getZeroPosition()]; 
+            }
+            
+            for (int i = 0; i < f2_fix.length; i++) {
+                f2_fix[i]=0;
+            }
+            for (int i = 0; i < f2.length; i++) {
+                f2_fix[i]=f2[i];
+            }       
+            for (int i = 0; i < tam; i++) {
+                resultado[i]=f1_fix[i]+f2_fix[i];
+            }
+        }
+       
+        generateInitialGraph(DF1,"Funcion 1","X ( N )",0);
+        generateInitialGraph(DF2,"Funcion 2"," H ( N )",1);
+        return new discreteFunction(resultado,DF1.getZeroPosition()+DF2.getZeroPosition());
+    }
+     public discreteFunction resta(){
+        discreteFunction DF1 = getFunction("Ingrese la primer funcion discreta");
+        double [] f1=DF1.getValues();
+        discreteFunction DF2 = getFunction("Ingrese la seguda funcion discreta");
+        double f2[] = DF2.getValues();
+        int tam=0;
+        if(f1.length>=f2.length){
+            tam=f1.length+DF2.getZeroPosition();
+        }else{
+          //--caso1:f2.length > f1.length y DF1.getZeroPosition()>DF2.getZeroPosition()---------------------
+         tam=f2.length+DF1.getZeroPosition(); 
+        }
+            double f2_fix[]=new double[tam];
+            double f1_fix[]=new double[tam];
+            double resultado[]=new double[tam];
+        if(DF1.getZeroPosition()>=DF2.getZeroPosition()&&f2.length>f1.length){//caso 1
+            
+            for (int i = 0; i < f2_fix.length; i++) {
+                f2_fix[i]=0;
+            }
+            for (int i = DF1.getZeroPosition(); i < f2_fix.length; i++) {
+                f2_fix[i]=f2[i-DF1.getZeroPosition()]; 
+            }
+            for (int i = 0; i < f1_fix.length; i++) {
+                f1_fix[i]=0;
+            }
+            for (int i = 0; i < f1.length; i++) {
+                f1_fix[i]=f1[i];
+            }
+            for (int i = 0; i < tam; i++) {
+                resultado[i]=f1_fix[i]-f2_fix[i];
+            }
+        }else{//caso2
+            for (int i = 0; i < f1_fix.length; i++) {
+                f1_fix[i]=0;
+            }
+            for (int i = DF2.getZeroPosition(); i < f1_fix.length; i++) {
+                f1_fix[i]=f1[i-DF2.getZeroPosition()]; 
+            }
+            for (int i = 0; i < f2_fix.length; i++) {
+                f2_fix[i]=0;
+            }
+            for (int i = 0; i < f2.length; i++) {
+                f2_fix[i]=f2[i];
+            }
+            for (int i = 0; i < tam; i++) {
+                resultado[i]=f1_fix[i]-f2_fix[i];
+            }  
+        }
+       
+        generateInitialGraph(DF1,"Funcion 1","X ( N )",0);
+        generateInitialGraph(DF2,"Funcion 2"," H ( N )",1);
+        return new discreteFunction(resultado,DF1.getZeroPosition()+DF2.getZeroPosition());
+    }
 
     public discreteFunction reflejar()
     {
@@ -457,14 +566,15 @@ public class Con {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+     public static void main(String[] args) {
         Con c= new Con();
                 String option= JOptionPane.showInputDialog(null,
-                        "1 - Suma/Resta de señales finitas \n"
-                        + "2 - Amplificacion/atenuacion de señal finita y periodica \n"
-                        + "3 - Reflejo de señal finita\n"
-                        + "4 - desplazamiento de una señal finita\n"
-                        + "6 - Convolucion de señales finitas\n"
+                        "1 - Suma de señales finitas \n"
+                        + "2 - Resta de señales finitas \n"        
+                        + "3 - Amplificacion/atenuacion de señal finita y periodica \n"
+                        + "4 - Reflejo de señal finita\n"
+                        + "5 - desplazamiento de una señal finita\n"
+                        + "7 - Convolucion de señales finitas\n"
                         + "Otro - Salir","Tipo de Convolucion",JOptionPane.QUESTION_MESSAGE);
         discreteFunction R;
         switch(Integer.parseInt(option))
@@ -472,7 +582,15 @@ public class Con {
             /**
              * AMPLIFICACION
              */
+            case 1:
+                R=c.suma();
+                c.generateGraph(R, "Suma");
+                break;
             case 2:
+                R=c.resta();
+                c.generateGraph(R, "Resta");
+                break;
+            case 3:
                 R=c.amplificar(Double.parseDouble(
                         JOptionPane.showInputDialog(
                                 null,
@@ -484,14 +602,14 @@ public class Con {
             /**
              * REFLEXION
              */
-            case 3:
+            case 4:
                 R=c.reflejar();
                 c.generateGraph(R, "Reflexion");
                 break;
             /**
              *  DESPLAZAMIENTO
              */
-            case 4:
+            case 5:
                 R=c.desplazaF(Integer.parseInt(
                         JOptionPane.showInputDialog(
                                 null,
@@ -503,7 +621,7 @@ public class Con {
             /**
              * CONVOLUCION
              */
-            case 6:
+            case 7:
                 R = c.convF();
                 c.generateGraph(R, "Convolucion");
                 break;
