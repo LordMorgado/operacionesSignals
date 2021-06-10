@@ -563,10 +563,33 @@ public class Con {
         return new discreteFunction(res,DF1.getZeroPosition()+DF2.getZeroPosition());
     }
 
+    public discreteFunction DecimateSignal () {
+        discreteFunction DF1 = getFunction("Ingrese la funcion discreta periodica");
+        double []f1 = DF1.getValues();
+        ArrayList<Double> temp = new  ArrayList<Double>();
+        int sequence = Integer.parseInt(JOptionPane.showInputDialog(null,
+        "Ingresa el valor de la secuencia",JOptionPane.QUESTION_MESSAGE));
+        int index;
+        for (int i = 0; i < f1.length; i++) {
+            index = sequence * i;
+            if (index >= 0 && index < f1.length && f1[index] != 0) {
+                temp.add(f1[index]);
+            }
+        }
+        double [] new_values = new double[temp.size()];
+        int position = 0;
+        for (double value : temp) {
+            System.out.println(value);
+            new_values[position] = value;
+            position++;
+        }
+        return new discreteFunction(new_values,DF1.getZeroPosition());
+    } 
+
     /**
      * @param args the command line arguments
      */
-     public static void main(String[] args) {
+    public static void main(String[] args) {
         Con c= new Con();
                 String option= JOptionPane.showInputDialog(null,
                         "1 - Suma de señales finitas \n"
@@ -574,7 +597,9 @@ public class Con {
                         + "3 - Amplificacion/atenuacion de señal finita y periodica \n"
                         + "4 - Reflejo de señal finita\n"
                         + "5 - desplazamiento de una señal finita\n"
-                        + "7 - Convolucion de señales finitas\n"
+                        + "6 -  Diezmar señal\n" 
+                        + "7 - Interpolar señal\n"
+                        + "8 - Convolucion de señales finitas\n" 
                         + "Otro - Salir","Tipo de Convolucion",JOptionPane.QUESTION_MESSAGE);
         discreteFunction R;
         switch(Integer.parseInt(option))
@@ -617,6 +642,13 @@ public class Con {
                                 JOptionPane.QUESTION_MESSAGE)
                 ));
                 c.generateGraph(R, "Desplazamiento");
+                break;
+            /**
+             * DIEZMACIÓN
+             */
+            case 6: 
+                R = c.DecimateSignal();
+                c.generateGraph(R, "Diezmacion");
                 break;
             /**
              * CONVOLUCION
