@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
 
-import org.graalvm.compiler.core.common.type.ArithmeticOpTable.UnaryOp.Abs;
+// import org.graalvm.compiler.core.common.type.ArithmeticOpTable.UnaryOp.Abs;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
@@ -154,51 +154,6 @@ public class Con {
         return new discreteFunction(arr,zero);
     }
 
-    public discreteFunction sumaF()
-    {
-        discreteFunction DF1 = getFunction("Ingrese la primer funcion discreta");
-        double [] f1=DF1.getValues();
-        discreteFunction DF2 = getFunction("Ingrese la seguda funcion discreta");
-        double f2[] = DF2.getValues();
-        int arraySize = f1.length+f2.length-1;
-        double eMatrix[][] = new double[arraySize][arraySize];
-        int i,j;
-        for(i=0;i<arraySize;i++)
-            if(i<f1.length)
-                eMatrix[i][0]=f1[i];
-            else
-                eMatrix[i][0]=0;
-
-        for(j=1;j<arraySize;j++)//Va moviendo por columna para el corrimiento
-        {
-            eMatrix[0][j]=eMatrix[arraySize-1][j-1];
-            for(i=1;i<arraySize;i++)
-                eMatrix[i][j]=eMatrix[i-1][j-1];
-        }
-
-        double [] sMatrix = new double[arraySize];
-        for(i=0;i<arraySize;i++)
-            if(i<f2.length)
-                sMatrix[i]=f2[i];
-            else
-                sMatrix[i]=0;
-
-        double [] res=matMult(eMatrix,sMatrix);
-
-        System.out.println("Envolvente:");
-        printM(eMatrix);
-        System.out.println("Aux:");
-        for(double d:sMatrix)
-            System.out.print("\t"+d);
-        System.out.println("");
-        System.out.println("Res:");
-        for(double d:res)
-            System.out.print("\t"+d);
-        System.out.println("");
-        generateInitialGraph(DF1,"Funcion 1","X ( N )",0);
-        generateInitialGraph(DF2,"Funcion 2"," H ( N )",1);
-        return new discreteFunction(res,DF1.getZeroPosition()+DF2.getZeroPosition());
-    }
     public discreteFunction suma(){
        discreteFunction DF1 = getFunction("Ingrese la primer funcion discreta");
         double [] f1=DF1.getValues();
@@ -585,6 +540,7 @@ public class Con {
             new_values[position] = value;
             position++;
         }
+        generateInitialGraph(DF1,"Funcion 1","X ( N )",0);
         return new discreteFunction(new_values,DF1.getZeroPosition());
     } 
 
@@ -620,7 +576,7 @@ public class Con {
         for (double value : new_values) {
             System.out.println(value);
         }
-
+        generateInitialGraph(DF1,"Funcion 1","X ( N )",0);
         return new discreteFunction(new_values,DF1.getZeroPosition());
     }
 
