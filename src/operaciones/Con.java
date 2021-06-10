@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
+
+import org.graalvm.compiler.core.common.type.ArithmeticOpTable.UnaryOp.Abs;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
@@ -564,11 +566,11 @@ public class Con {
     }
 
     public discreteFunction DecimateSignal () {
-        discreteFunction DF1 = getFunction("Ingrese la funcion discreta periodica");
+        discreteFunction DF1 = getFunction("Ingrese la funcion discreta");
         double []f1 = DF1.getValues();
         ArrayList<Double> temp = new  ArrayList<Double>();
         int sequence = Integer.parseInt(JOptionPane.showInputDialog(null,
-        "Ingresa el valor de la secuencia",JOptionPane.QUESTION_MESSAGE));
+        "Ingresa el valor del factor",JOptionPane.QUESTION_MESSAGE));
         int index;
         for (int i = 0; i < f1.length; i++) {
             index = sequence * i;
@@ -585,6 +587,42 @@ public class Con {
         }
         return new discreteFunction(new_values,DF1.getZeroPosition());
     } 
+
+    public discreteFunction InterpolateSignal() {
+        discreteFunction DF1 = getFunction("Ingrese la funcion discreta");
+        double []f1 = DF1.getValues();
+        int sequence = Integer.parseInt(JOptionPane.showInputDialog(null,
+        "Ingresa el valor del factor",JOptionPane.QUESTION_MESSAGE));
+        
+        double gaps = 0;
+        double current_position = 0;
+        int index = 0;
+        double []new_values = new double [(sequence * f1.length) + 1];
+
+        for (int i = 0; i < f1.length; i++) {
+            new_values[index] = f1[i];
+            current_position = f1[i];
+            if (i == f1.length - 1) { break; }
+            gaps = Math.abs(f1[i] - f1[i+1]) * 1/(double)sequence;
+            for (int j = 0; j < sequence; j++) {
+                current_position += gaps;
+                new_values[++index] = current_position; 
+            }
+        } 
+
+        // Decrementa del último punto 0
+        gaps = current_position * (1/(double)sequence);
+        for (int j = 0; j < sequence; j++) {
+            current_position -= gaps;
+            new_values[++index] = current_position; 
+        }
+
+        for (double value : new_values) {
+            System.out.println(value);
+        }
+
+        return new discreteFunction(new_values,DF1.getZeroPosition());
+    }
 
     /**
      * @param args the command line arguments
@@ -651,9 +689,16 @@ public class Con {
                 c.generateGraph(R, "Diezmacion");
                 break;
             /**
-             * CONVOLUCION
+             * INTERPOLACION
              */
             case 7:
+                R =c.InterpolateSignal();
+                c.generateGraph(R, "Interpolacion");
+                break;
+            /**
+             * CONVOLUCION
+             */
+            case 8:
                 R = c.convF();
                 c.generateGraph(R, "Convolucion");
                 break;
